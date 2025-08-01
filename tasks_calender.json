@@ -1,0 +1,32 @@
+[
+    {
+        "task": "reading",
+        "done": false,
+        "date": "2025-07-17"
+    },
+    {
+        "task": "writing",
+        "done": false,
+        "date": "2025-07-16"
+    },
+    {
+        "task": "dancing",
+        "done": false,
+        "date": "2025-07-17"
+    },
+    {
+        "task": "baking",
+        "done": false,
+        "date": "2025-07-18"
+    },
+    {
+        "task": "running",
+        "done": true,
+        "date": "2025-07-18"
+    },
+    {
+        "task": "swimming",
+        "done": true,
+        "date": "2025-07-18"
+    }
+]

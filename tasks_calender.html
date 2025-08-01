@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ToDo App</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, #070254, #f39acf);
+        color: #333;
+        animation: fadeIn 1s ease-in;
+        max-width: 700px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+        font-size: 2em;
+        animation: slideInDown 0.8s ease-out;
+    }
+
+
+    h3 {
+        color: #f0e6ff; 
+        margin-top: 40px;
+        margin-bottom: 15px;
+        font-size: 1.4em;
+        font-weight: 600;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+        border-bottom: 2px solid #9250c1;
+        padding-bottom: 6px;
+    }
+
+    form {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 25px;
+        background: #ffffffdd;
+        padding: 14px;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        animation: slideInUp 0.8s ease-out;
+    }
+
+    input[type="text"] {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
+    button {
+        background-color: #9250c1;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        font-size: 18px;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+        filter: brightness(1.1);
+    }
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+        margin-top: 0;
+        margin-bottom: 25px;
+    }
+
+    li {
+        background: #f5f1f1ee;
+        margin-bottom: 15px;
+        padding: 14px 18px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        animation: slideInFade 0.6s ease forwards;
+        opacity: 0;
+    }
+
+    li span {
+        flex: 1;
+        font-size: 16px;
+        word-wrap: break-word;
+    }
+
+    li form {
+        display: inline;
+        margin-left: 10px;
+    }
+
+    li form:nth-of-type(2) button {
+        background-color: #911108;
+        color: #eae6e6;
+    }
+
+    li form:nth-of-type(1) button {
+        background-color: #004702;
+        color: #efe9e9;
+    }
+
+    .done {
+        text-decoration: line-through;
+        color: gray;
+        font-style: italic;
+    }
+
+    .task-date {
+        font-size: 12px;
+        color: #6b6767;
+        font-style: italic;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideInDown {
+        from { transform: translateY(-30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideInUp {
+        from { transform: translateY(30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideInFade {
+        to { opacity: 1; transform: translateY(0); }
+        from { opacity: 0; transform: translateY(10px); }
+    }
+</style>
+</head>
+<body>
+    <h1><b><u><i> My To Do List</i></u></b></h1>
+
+    <form action="/add/" method="post">
+        <input type="text" name="task" placeholder="Enter new task" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <div class="add-form">
+        <form action="{{ url_for('index') }}" method="get">
+            <input type="date" name="date" value="{{ selected_date or '' }}">
+            <button type="submit">Filter by Date</button>
+            {% if selected_date %}
+                <a href="{{ url_for('index') }}">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+
+    {% for date, tasks in grouped_tasks.items() %}
+        <h3>{{ date }}</h3>
+        <ul>
+        {% for task in tasks %}
+            <li>
+                <span class="{{ 'done' if task['done'] }}">{{ task['task'] }}</span>
+                {% if not task['done'] %}
+                <form action="{{ url_for('complete', task_id=task['index']) }}" method="post">
+                    <button type="submit">Complete</button>
+                </form>
+                {% endif %}
+                <form action="{{ url_for('delete', task_id=task['index']) }}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+
+</body>
+</html>
